@@ -10,6 +10,8 @@ use std::collections::HashMap;
 use std::io::Cursor;
 use std::sync::{Arc, Mutex};
 use tokio::select;
+use serde::Deserialize;
+use std::fs;
 
 mod audio;
 mod true_gear;
@@ -73,7 +75,7 @@ async fn main() -> anyhow::Result<()> {
 
     tokio::spawn(async move {
         loop {
-            tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
+            tokio::time::sleep(tokio::time::Duration::from_millis(50)).await;
             let mut buffer = DATA_BUFFER.lock().expect("Failed to lock buffer");
             if !buffer.is_empty() {
                 do_audio_fft(buffer.clone(), client_arc_clone.clone());
@@ -91,61 +93,111 @@ async fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
+#[derive(Deserialize)]
+struct Config {
+    start_freq_bass: i16,
+    end_freq_bass: i16,
+    start_freq_other: i16,
+    end_freq_other: i16,
+    bass_default_max_intensity: f32,
+    other_default_max_intensity: f32,
+    bass_intensity_percent: i32,
+    other_intensity_percent: i32,
+}
+
+fn load_config() -> Config {
+    let config_str = fs::read_to_string("config/config.json")
+        .expect("Failed to read config.json");
+    serde_json::from_str(&config_str).expect("Failed to parse config.json")
+}
+
+
 fn do_audio_fft(wav_data: Vec<u8>, client_arc_clone: Arc<Mutex<TrueGearClient>>) {
+
+    let config = load_config();
+
     let mut true_gear_msg_vec: Vec<TrackObject> = Vec::new();
     let spectrum = _get_fft(wav_data);
     let freq_vec: Vec<_> = spectrum.keys().copied().collect();
+    if freq_vec.is_empty() {
+        return; // pas de data audio
+    }
+
     let max_freq = freq_vec.iter().max().unwrap();
-    // 将频率区间平均分成 5 份
     let freq_interval = *max_freq as f32 / 5.0;
-    // 开始计算每个频率区间的强度
-    for i in 0..5 {
-        let start_freq = (i as f32 * freq_interval) as i16;
-        let end_freq = ((i + 1) as f32 * freq_interval) as i16;
-        let mut intensity = 0.0;
-        for (freq, &value) in spectrum.iter() {
-            if freq >= &start_freq && freq < &end_freq {
-                intensity += value;
-            }
-        }
+    let start_freq_bass = config.start_freq_bass;
+    let end_freq_bass = config.end_freq_bass;
+    let start_freq_other = config.start_freq_other;
+    let end_freq_other = config.end_freq_other;
+//    let end_freq = freq_interval as i16;
 
-        let mut default_max_intensity = 1800.0; // 假设最大 raw 为 1800
-        if i == 0 {
-            // 0 是最常见的频率区间,增大最大值
-            default_max_intensity = 10000.0;
+    // Calcul de l’intensité sur la bande basse
+    let mut bass_intensity = 0.0;
+    for (freq, &value) in spectrum.iter() {
+        if *freq >= start_freq_bass && *freq < end_freq_bass {
+            bass_intensity += value;
         }
-
-        intensity = intensity / 5.0; // 平均强度
-        let intensity_percent = (intensity / default_max_intensity * 100.0) as i32;
-
-        // 过滤掉强度过低的频率,避免傻震
-        if (i == 0 && intensity_percent < 30) || (i != 0 && intensity_percent < 10) {
-            continue;
+    }
+    let mut other_intensity = 0.0;
+    for (freq, &value) in spectrum.iter() {
+        if *freq >= start_freq_other && *freq < end_freq_other {
+            other_intensity += value;
         }
+    }
+
+    // Normalisation et seuil
+    let bass_default_max_intensity = config.bass_default_max_intensity; 
+    bass_intensity = bass_intensity / 5.0;
+    let bass_intensity_percent = (bass_intensity / bass_default_max_intensity * 100.0) as i32;
+    println!("DEBUG Bass Intensity: {:?}", bass_intensity_percent);
+    let other_default_max_intensity = config.other_default_max_intensity;
+    other_intensity = other_intensity / 5.0;
+    let other_intensity_percent = (other_intensity / other_default_max_intensity * 100.0) as i32;
+    println!("DEBUG Other Intensity: {:?}", other_intensity_percent);
+
+    if bass_intensity_percent > config.bass_intensity_percent {
+        let mut all_vec = crate::true_gear::TRUE_GEAR_SHAKE_MIDDLE_FRONT.to_vec();
+        all_vec.append(&mut crate::true_gear::TRUE_GEAR_SHAKE_MIDDLE_BACK.to_vec());
 
         let track = TrackObject::new_shake_duration(
-            Some(100),               // 持续时间 100ms
-            Some(intensity_percent), // 起始强度
-            Some(intensity_percent), // 结束强度
+            Some(60),               
+            Some(bass_intensity_percent-20), 
+            Some(bass_intensity_percent-20), 
             None,
-            true_gear::get_shake_level_index(i),
+            all_vec,                 
         );
         true_gear_msg_vec.push(track);
     }
+    if other_intensity_percent > config.other_intensity_percent {
+        
+        let mut all_vec = crate::true_gear::TRUE_GEAR_SHAKE_AROUND_FRONT.to_vec();
+        all_vec.append(&mut crate::true_gear::TRUE_GEAR_SHAKE_AROUND_BACK.to_vec());
+
+        let track = TrackObject::new_shake_duration(
+            Some(60),               
+            Some(other_intensity_percent-20), 
+            Some(other_intensity_percent-20), 
+            None,
+            all_vec,                 
+        );
+        true_gear_msg_vec.push(track);
+    }
+
+    
     tokio::spawn(async move {
         let client_arc_clone = client_arc_clone.clone();
         let true_gear_msg_vec = true_gear_msg_vec.clone();
         tokio::task::spawn_blocking(move || {
             let mut client = client_arc_clone.lock().unwrap();
             tokio::runtime::Handle::current().block_on(async {
-                client.send_shake(true_gear_msg_vec).await.unwrap();
+                if !true_gear_msg_vec.is_empty() {
+                    client.send_shake(true_gear_msg_vec).await.unwrap();
+                }
             });
         })
         .await
         .unwrap();
     });
-
-    // println!("Max freq: {}", max_freq);
 }
 
 fn _get_fft(data: Vec<u8>) -> HashMap<i16, f32> {
