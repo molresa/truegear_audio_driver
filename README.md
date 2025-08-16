@@ -1,6 +1,6 @@
 # TrueGear Suit Audio Driver
 
-This is a fork of the Audio Driver for the TrueGear Suit done by ...
+This is a fork of the Audio Driver for the TrueGear Suit done by xkeyC
 
 It's already working nicely to transcribe audio to vibration but I wanted to do some slight modification to it to make it better. So here the reason of this fork.
 
