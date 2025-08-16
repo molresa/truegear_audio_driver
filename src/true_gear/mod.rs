@@ -11,25 +11,41 @@ pub mod def;
 
 static TRUE_GEAR_SERVER: &str = "ws://localhost:18233/v1/tact/";
 
-static TRUE_GEAR_SHAKE_FRONT: Lazy<Vec<i32>> = Lazy::new(|| {
+pub static TRUE_GEAR_SHAKE_AROUND_FRONT: Lazy<Vec<i32>> = Lazy::new(|| {
     vec![
         0, 1, 2, 3, // line 1
-        4, 5, 6, 7, // line 2
-        8, 9, 10, 11, // line 3
-        12, 13, 14, 15, // line4
+        4, 7, // line 2
+        8, 11, // line 3
+        12, 15, // line4
         16, 17, 18, 19, // line 5
     ]
 });
 
-static TRUE_GEAR_SHAKE_BACK: Lazy<Vec<i32>> = Lazy::new(|| {
+pub static TRUE_GEAR_SHAKE_AROUND_BACK: Lazy<Vec<i32>> = Lazy::new(|| {
     vec![
         100, 101, 102, 103, // line 1
-        104, 105, 106, 107, // line 2
-        108, 109, 110, 111, // line 3
-        112, 113, 114, 115, // line 4
+        104, 107, // line 2
+        108, 111, // line 3
+        112, 115, // line 4
         116, 117, 118, 119, // line 5
     ]
-});
+    });
+
+    pub static TRUE_GEAR_SHAKE_MIDDLE_FRONT: Lazy<Vec<i32>> = Lazy::new(|| {
+        vec![
+            5, 6,
+            9, 10,
+            13, 14,
+        ]
+    });
+
+    pub static TRUE_GEAR_SHAKE_MIDDLE_BACK: Lazy<Vec<i32>> = Lazy::new(|| {
+        vec![
+            105, 106,
+            109, 110,
+            113, 114,
+        ]
+    });
 
 pub struct TrueGearClient {
     writer: SplitSink<WebSocketStream<MaybeTlsStream<TcpStream>>, Message>,
@@ -51,8 +67,8 @@ impl TrueGearClient {
     }
 
     pub(crate) async fn test_all(&mut self) -> anyhow::Result<()> {
-        let mut all_vec = Vec::from(TRUE_GEAR_SHAKE_FRONT.clone());
-        all_vec.append(&mut Vec::from(TRUE_GEAR_SHAKE_BACK.clone()));
+        let mut all_vec = Vec::from(TRUE_GEAR_SHAKE_MIDDLE_FRONT.clone());
+        all_vec.append(&mut Vec::from(TRUE_GEAR_SHAKE_MIDDLE_BACK.clone()));
         let message =
             TrueGearWsMessage::new_no_registered(vec![def::TrackObject::new_shake_duration(
                 Some(100),
