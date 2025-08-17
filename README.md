@@ -7,6 +7,11 @@ It's already working nicely to transcribe audio to vibration but I wanted to do 
 Too, It come with a config if you want to modify some settings in it like sensitivity !
 
 # Config
+## *Other Settings*
+*Will Work in V0.3 !*
+
+- **update_time** : *How much the frequency check should update in ms.*
+
 ## *Let's start with the start/end_freq parameters*
 *Basically, theses are a range for the Frequency you want the suit to react !*
 
