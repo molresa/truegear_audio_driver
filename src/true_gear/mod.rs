@@ -47,6 +47,54 @@ pub static TRUE_GEAR_SHAKE_AROUND_BACK: Lazy<Vec<i32>> = Lazy::new(|| {
         ]
     });
 
+    pub static TRUE_GEAR_SHAKE_UP_FRONT: Lazy<Vec<i32>> = Lazy::new(|| {
+        vec![
+            0, 1, 2, 3, // line 1
+            4, 5, 6, 7, // line 2
+        ]
+    });
+
+    pub static TRUE_GEAR_SHAKE_UP_BACK: Lazy<Vec<i32>> = Lazy::new(|| {
+        vec![
+            100, 101, 102, 103, // line 1
+            104, 105, 106, 107, // line 2
+        ]
+    });
+
+    pub static TRUE_GEAR_SHAKE_DOWN_FRONT: Lazy<Vec<i32>> = Lazy::new(|| {
+        vec![
+            12, 13, 14, 15, // line4
+            16, 17, 18, 19, // line 5
+        ]
+    });
+
+    pub static TRUE_GEAR_SHAKE_DOWN_BACK: Lazy<Vec<i32>> = Lazy::new(|| {
+        vec![
+            112, 113, 114, 115, // line 4
+            116, 117, 118, 119, // line 5
+        ]
+    });
+
+    pub static TRUE_GEAR_SHAKE_FRONT: Lazy<Vec<i32>> = Lazy::new(|| {
+        vec![
+            0, 1, 2, 3, // line 1
+            4, 5, 6, 7, // line 2
+            8, 9, 10, 11, // line 3
+            12, 13, 14, 15, // line4
+            16, 17, 18, 19, // line 5
+        ]
+    });
+
+    pub static TRUE_GEAR_SHAKE_BACK: Lazy<Vec<i32>> = Lazy::new(|| {
+        vec![
+            100, 101, 102, 103, // line 1
+            104, 105, 106, 107, // line 2
+            108, 109, 110, 111, // line 3
+            112, 113, 114, 115, // line 4
+            116, 117, 118, 119, // line 5
+        ]
+    });
+
 pub struct TrueGearClient {
     writer: SplitSink<WebSocketStream<MaybeTlsStream<TcpStream>>, Message>,
     is_connected: bool,
