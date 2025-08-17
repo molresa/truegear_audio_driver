@@ -10,7 +10,8 @@ Too, It come with a config if you want to modify some settings in it like sensit
 ## *Other Settings*
 *Will Work in V0.3 !*
 
-- **update_time** : *How much the frequency check should update in ms.*
+- **update_time** : *How often the audio data should be analyzed in ms*
+- **vibration_time** : *How much time you want the vibration to persist in ms*
 
 ## *Let's start with the start/end_freq parameters*
 *Basically, theses are a range for the Frequency you want the suit to react !*
@@ -43,7 +44,7 @@ Too, It come with a config if you want to modify some settings in it like sensit
 - **other_intensity_max_percent** : *Same but, for all of the other frequency.*
 
 ## *Here The Pattern Settings !*
-*Do work in the V0.2 ! But, Small notice, Didn't do the Left/Right pattern yet !*
+*Do work in the V0.2 ! But, Small notice, Left/Right pattern work only in V0.3 !*
 
 - **pattern_bass** : *This will dictate the pattern of the vibration of the suit for the bass ! To know all of the avaliable pattern, look down there !*
 - **pattern_other** : *Same, but for all of the other frequency.*
@@ -60,6 +61,11 @@ Too, It come with a config if you want to modify some settings in it like sensit
 - **none** : *Will not make the suit vibrate*
 
 ### Other Patterns !
+
+### *Cross*
+*Only Work in V0.3*
+- **cross_left** : *Will make the left front side and the right back side of the suit vibrate !*
+- **cross_right** : *Will make the right front side and the left back side of the suit vibrate !*
 
 ### *Middle*
 
