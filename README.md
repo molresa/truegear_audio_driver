@@ -13,74 +13,84 @@ Too, It come with a config if you want to modify some settings in it like sensit
 - **start_freq_bass** : *At how much for the bass frequency in Hz it should start to react for the suit to vibrate ?*
 - **end_freq_bass** : *At how much for the bass frequency in Hz it should end to react for the suit to vibrate ?*
 
-- **start_freq_other** : *At how much for the bass frequency in Hz it should start to react for the suit to vibrate ?*
-- **end_freq_other** : *At how much for the bass frequency in Hz it should end to react for the suit to vibrate ?*
+- **start_freq_treble** : *At how much for the treble frequency in Hz it should start to react for the suit to vibrate ?*
+- **end_freq_treble** : *At how much for the treble frequency in Hz it should end to react for the suit to vibrate ?*
 
-*As for now, There is only two frequency range to modify. I might add more in the future to separate like high or low mids or some other frequency if people want !*
+- **start_freq_other** : *At how much for the other frequency in Hz it should start to react for the suit to vibrate ?*
+- **end_freq_other** : *At how much for the other frequency in Hz it should end to react for the suit to vibrate ?*
+
+*As for now, There is only three frequency range to modify. I might add more in the future to separate some other frequency if people want !*
 
 ## *Now here the sensitivity settings !*
 
 - **bass_default_max_intensity** : *This number will dictate the sensitivity of the bass frequency, the lower it is, the more it will vibrate to this frequency ! (Do note that the suit will react "dynamically" (way more bass = way more vibration) to the value)*
+- **treble_default_max_intensity** : *Same as up here, but for all of the treble frequency.*
 - **other_default_max_intensity** : *Same as up here, but for all of the other frequency.*
 
 
 - **bass_intensity_percent** : *This is another sensitivity settings for the bass frequency that will this time dictate the treshold that it need to reach before sending a vibration to the suit ! This is to avoid making the suit always vibrate*
+- **treble_intensity_percent** : *Same but, for all of the treble frequency.*
 - **other_intensity_percent** : *Same but, for all of the other frequency.*
 
+
+- **bass_intensity_max_percent** : *This number will be the maximum strenght send to the suit If the max intensity percentage is reached ! (As an exemple, can be useful if you have an high threshold but only need to send small vibration to the suit)*
+- **treble_intensity_max_percent** : *Same but, for all of the treble frequency.*
+- **other_intensity_max_percent** : *Same but, for all of the other frequency.*
+
 ## *Here The Pattern Settings !*
-*As a notice, for now, they don't work, I will try to make an update soon to make it work !*
+*Do work in the V0.2 ! But, Small notice, Didn't do the Left/Right pattern yet !*
 
 - **pattern_bass** : *This will dictate the pattern of the vibration of the suit for the bass ! To know all of the avaliable pattern, look down there !*
 - **pattern_other** : *Same, but for all of the other frequency.*
+- **pattern_treble** : *Same, but for all of the treble frequency.*
 
 
 ## *Patterns*
-*As said up there, it's not working yet ! But here the future list of pattern that will be implemented !*
 
 ### *Normal Pattern*
 
-- **all** : *Will make the full suit vibrate !*
-- **front** : *Will only make the front of the suit vibrate !*
-- **back** : *Will only make the back of the suit vibrate !*
-- **none** : *Will not make the suit vibrate !*
+- **all** : *Will make the full suit vibrate*
+- **front** : *Will only make the front of the suit vibrate*
+- **back** : *Will only make the back of the suit vibrate*
+- **none** : *Will not make the suit vibrate*
 
 ### Other Patterns !
 
 ### *Middle*
 
-- **middle_all** :
-- **middle_front** :
-- **midle_back** :
+- **middle_all** : *Will only make the middle of the suit vibrate*
+- **middle_front** : *Same, but only for the front of the suit*
+- **midle_back** : *Same, but only for the back of the suit*
 
 ### *Around*
 
-- **around_all** :
-- **around_front** :
-- **around_back** :
+- **around_all** : *Will only make the around/corner of the suit vibrate*
+- **around_front** : *Same, but only for the front of the suit*
+- **around_back** : *Same, but only for the back of the suit*
 
 ### *Left*
 
-- **left_all** :
-- **left_front** :
-- **left_back** :
+- **left_all** : *Will only make the left side of the suit vibrate*
+- **left_front** : *Same, but only for the front of the suit*
+- **left_back** : *Same, but only for the back of the suit*
 
 ### *Right*
 
-- **right_all** :
-- **right_front** :
-- **right_back** :
+- **right_all** : *Will only make the right side of the suit vibrate*
+- **right_front** : *Same, but only for the front of the suit*
+- **right_back** : *Same, but only for the back of the suit*
 
 ### *Up*
 
-- **up_all** :
-- **up_front** :
-- **up_back** :
+- **up_all** : *Will only make the up part of the suit vibrate*
+- **up_front** : *Same, but only for the front of the suit*
+- **up_back** : *Same, but only for the back of the suit*
 
 ### *Down*
 
-- **down_all** :
-- **down_front** :
-- **down_back** :
+- **down_all** : *Will only make the down part of the suit vibrate*
+- **down_front** : *Same, but only for the front of the suit*
+- **down_back** : *Same, but only for the back of the suit*
 
 
 MIT License
