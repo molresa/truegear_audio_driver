@@ -13,6 +13,10 @@ Too, It come with a config if you want to modify some settings in it like sensit
 - **update_time** : *How often the audio data should be analyzed in ms*
 - **vibration_time** : *How much time you want the vibration to persist in ms*
 
+
+*Will Work in V0.4*
+- **debug** : *Will show some debugs value of the Intensity in the console ! Usefull if you want to play with sensitivity*
+- **stereo** : *Do you want to enable stereo haptic ? (So If a Sound Come more from the Left, It will only Vibrate the Left Part of the Suit)* ***Do take in note that stereo is pretty janky as right now (As It's taking general stereo value so it will work well if everything is left/right but if there is still a bit of audio to an audio channel it might be janky !) I will try to make it better in future update !***
 ## *Let's start with the start/end_freq parameters*
 *Basically, theses are a range for the Frequency you want the suit to react !*
 
@@ -43,6 +47,14 @@ Too, It come with a config if you want to modify some settings in it like sensit
 - **treble_intensity_max_percent** : *Same but, for all of the treble frequency.*
 - **other_intensity_max_percent** : *Same but, for all of the other frequency.*
 
+***For the Stereo in V0.4, there is some different intensity settings specially to it !***
+
+- **stereo_bass_default_max_intensity** : *This number will dictate the sensitivity of the bass frequency specially if stereo is enabled !, the lower it is, the more it will vibrate to this frequency ! (Do note that the suit will react "dynamically" (way more bass = way more vibration) to the value)*
+- **stereo_treble_default_max_intensity** : *Same as up here, but for all of the treble frequency.*
+- **stereo_other_default_max_intensity** : *Same as up here, but for all of the other frequency.*
+- **stereo_threshold** : *The threshold for how much the sound have to be different from left to right channel to start the left to right vibration*
+
+
 ## *Here The Pattern Settings !*
 *Do work in the V0.2 ! But, Small notice, Left/Right pattern work only in V0.3 !*
 
@@ -50,6 +62,7 @@ Too, It come with a config if you want to modify some settings in it like sensit
 - **pattern_other** : *Same, but for all of the other frequency.*
 - **pattern_treble** : *Same, but for all of the treble frequency.*
 
+  *For the V0.4, There is new settings for the stereo settings ! Theses are the same as up there but just for the pattern that it should do if there is more sound in left or right stereo channel.*
 
 ## *Patterns*
 
